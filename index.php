@@ -1,8 +1,6 @@
 <?php
 
 
-echo "test";
-
 date_default_timezone_set('Europe/Paris');
 	try
 	{

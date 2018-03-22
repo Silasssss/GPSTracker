@@ -13,11 +13,11 @@ CREATE TABLE IF NOT EXISTS `mydb`.`users` (
   `name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
-  `confirmation_token` VARCHAR(60) NULL DEFAULT 0,
-  `confirmed_at` DATETIME NULL DEFAULT 0,
-  `reset_token` VARCHAR(60) NULL DEFAULT 0,
-  `reset_at` DATETIME NULL DEFAULT 0,
-  `remember_token` VARCHAR(250) NULL DEFAULT 0,
+  `confirmation_token` VARCHAR(60),
+  `confirmed_at` DATETIME NULL,
+  `reset_token` VARCHAR(60) NULL,
+  `reset_at` DATETIME NULL ,
+  `remember_token` VARCHAR(250) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 

@@ -4,7 +4,8 @@
 date_default_timezone_set('Europe/Paris');
 	try
 	{
-		$bdd = new PDO('mysql:host=localhost;dbname=GPS;charset=utf8', 'root', 'ssi');
+		$bdd = new PDO('mysql:host=localhost;dbname=GPS;charset=utf8', 'root', '');
+		#$bdd = new PDO('mysql:host=localhost;dbname=GPS;charset=utf8', 'root', 'ssi');
 	}
 	catch(Exception $e)
 	{	

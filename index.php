@@ -4,8 +4,7 @@
 date_default_timezone_set('Europe/Paris');
 	try
 	{
-		#$bdd = new PDO('mysql:host=localhost;dbname=GPS;charset=utf8', 'root', '');
-		$bdd = new PDO('mysql:host=localhost;dbname=GPS;charset=utf8', 'root', 'ssi');
+		$bdd = new PDO('mysql:host=localhost;dbname=gps;charset=utf8', 'root', '');
 	}
 	catch(Exception $e)
 	{	
@@ -18,7 +17,7 @@ date_default_timezone_set('Europe/Paris');
 		$status = "erreur aucune donnée";
 		}
 	else{
-		//$status = "données recupéres avec succès";
+		$status = "données recupéres avec succès";
 		}
 	$req->execute();    
 	while($row = $req->fetch()) 
@@ -30,3 +29,42 @@ date_default_timezone_set('Europe/Paris');
 		}      
     echo $status;
 ?>
+<h3></h3>
+<div id="map"></div>
+#map {
+  height: 400px;
+  width: 100%;
+ }
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANFCjBuEsUO1o49ZVkXdukdZ2OLUfnajg&callback=initMap">
+</script>
+<script src="inc/function.js"></script>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 400px;
+        width: 50%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3></h3>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var uluru = {lat: 48.1843903, lng: -2.762291};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+
+    </script>
+  </body>
+</html>

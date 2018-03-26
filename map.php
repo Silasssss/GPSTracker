@@ -28,6 +28,7 @@
   </head>
 
   <body>
+	  	<h3 id="dev"></h3>
     <div id="map"></div>
 	
     <script>
@@ -55,7 +56,6 @@
               var point = new google.maps.LatLng(
                   parseFloat(markerElem.getAttribute('lat')),
                   parseFloat(markerElem.getAttribute('lng')));
-
 			  //création boite qui contient les infos sur le point
               var infowincontent = document.createElement('div');
               var strong = document.createElement('strong');
@@ -72,6 +72,7 @@
                 position: point,
                 label: icon.label
               });
+                                document.getElementById("dev").innerHTML = point;
               //évenement pour détection le click sur le marker et afficher les infos sur celui-ci
               marker.addListener('click', function() {
                 infoWindow.setContent(infowincontent);
@@ -81,6 +82,7 @@
           });
         }
       doNothing();
+      
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANFCjBuEsUO1o49ZVkXdukdZ2OLUfnajg&callback=initMap">

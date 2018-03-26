@@ -5,35 +5,36 @@
 #		: - création d'un fichier XML
 
 require("bdd.php");
-
-
 $dom = new DOMDocument("1.0");
 $node = $dom->createElement("markers");
 $parnode = $dom->appendChild($node);
+	try
+	{
+		$bdd = new PDO('mysql:host=localhost;dbname=gps;charset=utf8', 'root', '');
+	}
+	catch(Exception $e)
+	{	
+        die('Erreur : '.$e->getMessage());
+	}
+
+	$req = $bdd->prepare('SELECT * FROM coords WHERE 1');
+	$req->execute();
+	if ($donnees = $req->fetch() == 0){
+		$status = "erreur aucune donnée";
+		}
+	else{
+		$status = "données recupéres avec succès";
+		}
+	$req->execute();   
 
 
-$connection=mysql_connect ('localhost', $username, $password);
-if (!$connection) {  die('erreur de connexion : ' . mysql_error());}
 
-
-$db_selected = mysql_select_db($database, $connection);
-if (!$db_selected) {
-  die ('' . mysql_error());
-}
-
-
-
-$query = "SELECT * FROM coords WHERE 1";
-$result = mysql_query($query);
-if (!$result) {
-  die('' . mysql_error());
-}
 
 header("Content-type: text/xml");
 
 
 
-while ($row = @mysql_fetch_assoc($result)){
+while ($row = $req->fetch()){
 
   $node = $dom->createElement("marker");
   $newnode = $parnode->appendChild($node);

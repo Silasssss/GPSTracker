@@ -4,7 +4,7 @@
 date_default_timezone_set('Europe/Paris');
 	try
 	{
-		$bdd = new PDO('mysql:host=localhost;dbname=gps;charset=utf8', 'root', 'ssi');
+		$bdd = new PDO('mysql:host=localhost;dbname=gps;charset=utf8', 'root', '');
 	}
 	catch(Exception $e)
 	{	
@@ -35,7 +35,6 @@ date_default_timezone_set('Europe/Paris');
   height: 400px;
   width: 100%;
  }
- <!-- Replace the value of the key parameter with your own API key. -->
 <script async defer
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANFCjBuEsUO1o49ZVkXdukdZ2OLUfnajg&callback=initMap">
 </script>

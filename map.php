@@ -57,6 +57,7 @@
                   parseFloat(markerElem.getAttribute('lat')),
                   parseFloat(markerElem.getAttribute('lng')));
 			  //création boite qui contient les infos sur le point
+			  //div & test
               var infowincontent = document.createElement('div');
               var strong = document.createElement('strong');
               strong.textContent = capteur

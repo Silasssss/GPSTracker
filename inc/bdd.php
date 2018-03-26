@@ -1,5 +1,5 @@
 <?php
 $username="root";
-$password="ssi";
+$password="";
 $database="gps";
 ?>

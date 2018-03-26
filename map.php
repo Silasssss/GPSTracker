@@ -47,7 +47,7 @@
           zoom: 12
         });
         var infoWindow = new google.maps.InfoWindow;
-          downloadUrl('http://localhost/GPS/inc/convert.php', function(data) {
+          downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {

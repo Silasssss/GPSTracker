@@ -1,15 +1,19 @@
 <?php
-
-
-date_default_timezone_set('Europe/Paris');
-	try
-	{
-		$bdd = new PDO('mysql:host=localhost;dbname=gps;charset=utf8', 'root', 'ssi');
-	}
-	catch(Exception $e)
-	{	
-        die('Erreur : '.$e->getMessage());
-	}
+/* 
+ *             2017-2018
+ * Author : Silas riacourt <silasdu22@gmail.com>
+ * 
+ * 
+ * BUT :  Pouvoir visualiser un  trajet réalisé en voiture ou à pieds
+ *        données préalablement récupérés par un shield GPS
+ *        Architecture du site : - visualisation du dernier trajet sur carte
+ *                               - Affichage de statistique sur ce trajet (durée , vitesse , heure départ - heure arrivée)
+ *                               - Possibilitée de selectionner un trajet
+ * 
+ * 
+ * 
+ */
+require("inc/bdd.php");
 
 	$req = $bdd->prepare('SELECT latitude, longitude FROM coords');
 	$req->execute();

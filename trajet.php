@@ -1,3 +1,30 @@
+<?php
+/* 
+ *             2017-2018
+ * Author : Silas riacourt <silasdu22@gmail.com>
+ * 
+ */
+
+    if (isset($_GET['date']))
+    {
+ 
+        $date = $_GET['date'];
+
+    }
+    else
+    {
+        date_default_timezone_set('Europe/Paris');
+        $date = date("Y-m-d");
+    }
+    require 'inc/bdd.php';
+    $req = $bdd->prepare('SELECT * FROM coords WHERE DATE(date) = :date');
+    $req->bindParam(':date', $_GET['date']);
+    $req->execute();
+    if ($donnees = $req->fetch() == 0){
+            $status = "Aucune donnée pour cette période ($date)";
+    }
+    $req->execute();
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -18,7 +45,7 @@
     </style>
   </head>
   <body>
-
+<h2 align="center"><?php echo $status;?></h2>
 	<h3 id="dev"></h3>
     <div id="map"></div>
     <script>
@@ -44,10 +71,6 @@
         });
         var test = [
             <?php
-            require("inc/bdd.php");
-            $bdd = new PDO('mysql:host=localhost;dbname=gps;charset=utf8', 'root', 'ssi');
-            $req = $bdd->prepare('SELECT latitude, longitude FROM coords WHERE 1');
-            $req->execute();
 
              while ($row = $req->fetch()){
                    $lat = $row['latitude'];

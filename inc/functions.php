@@ -1,7 +1,9 @@
 <?php
 /* 
-    Author : Silas riacourt <silasdu22@gmail.com>
-*/ 
+ *             2017-2018
+ * Author : Silas riacourt <silasdu22@gmail.com>
+ * 
+ */
 function debug($variable){
 
 	echo '<pre>' . print_r($variable, true) . '</pre>';
@@ -13,7 +15,7 @@ function str_random($length){
 
 }
 function get_url(){
-	$url ="localhost/web2";
+	$url ="localhost/GPSTracker";
 	return $url;
 
 }

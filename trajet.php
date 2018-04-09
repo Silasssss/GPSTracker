@@ -22,7 +22,7 @@
 	<h3 id="dev"></h3>
     <div id="map"></div>
     <script>
-          downloadUrl('http://localhost/GPS/inc/convert.php', function(data) {
+          downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
             var xml = data.responseXML;
             var polylinePlanCoordinates  = [];
             var markers = xml.documentElement.getElementsByTagName('marker');
@@ -38,25 +38,25 @@
 
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 10,
+          zoom: 14,
           center: {lat: 48.1843903, lng: -2.762291},
           mapTypeId: 'terrain'
         });
-		var test = [
-    <?php
-    require("inc/bdd.php");
-    $bdd = new PDO('mysql:host=localhost;dbname=gps;charset=utf8', 'root', '');
-    $req = $bdd->prepare('SELECT latitude, longitude FROM coords WHERE 1');
-    $req->execute();
+        var test = [
+            <?php
+            require("inc/bdd.php");
+            $bdd = new PDO('mysql:host=localhost;dbname=gps;charset=utf8', 'root', 'ssi');
+            $req = $bdd->prepare('SELECT latitude, longitude FROM coords WHERE 1');
+            $req->execute();
 
-    while ($row = $req->fetch()){
-        $lat = $row['latitude'];
-        $lon = $row['longitude'];
-        echo 'new google.maps.LatLng('.$lat.', '.$lon.'),';
-    }
-    ?>
-
-    ];
+             while ($row = $req->fetch()){
+                   $lat = $row['latitude'];
+                     $lon = $row['longitude'];
+                   echo 'new google.maps.LatLng('.$lat.', '.$lon.'),';
+            }
+             ?>
+        ];
+        
         var point2 = [
           {lat: 48.184873, lng: -2.7594},
           {lat: 48.1785384, lng: -2.7241418},
@@ -76,7 +76,7 @@
     </script>
         <script>
         var infoWindow = new google.maps.InfoWindow;
-          downloadUrl('http://localhost/GPS/inc/convert.php', function(data) {
+          downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {

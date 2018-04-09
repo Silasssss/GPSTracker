@@ -10,7 +10,7 @@ $node = $dom->createElement("markers");
 $parnode = $dom->appendChild($node);
 	try
 	{
-		$bdd = new PDO('mysql:host=localhost;dbname=gps;charset=utf8', 'root', '');
+		$bdd = new PDO('mysql:host=localhost;dbname=gps;charset=utf8', 'root', 'ssi');
 	}
 	catch(Exception $e)
 	{	
@@ -19,7 +19,8 @@ $parnode = $dom->appendChild($node);
 
 	$req = $bdd->prepare('SELECT * FROM coords WHERE 1');
 	$req->execute();
-	if ($donnees = $req->fetch() == 0){
+        $donnees = $req->fetch();
+	if ($donnees === 0){
 		$status = "erreur aucune donnée";
 		}
 	else{

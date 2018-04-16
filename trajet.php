@@ -50,6 +50,7 @@
     <div id="map"></div>
     <script>
           downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
+              
             var xml = data.responseXML;
             var polylinePlanCoordinates  = [];
             var markers = xml.documentElement.getElementsByTagName('marker');

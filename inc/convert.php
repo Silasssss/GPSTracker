@@ -9,6 +9,7 @@
 #		: - utiliser la fonction DOM de php pour exporter les données en un fichier XML
 #		: - création d'un fichier XML
 
+
 require("bdd.php");
 $dom = new DOMDocument("1.0");
 $node = $dom->createElement("markers");

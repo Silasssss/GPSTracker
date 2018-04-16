@@ -47,14 +47,15 @@
           label: '2'
         }
       };
-
+        //initialisaiton de la map
         function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
           center: new google.maps.LatLng(48.1843903, -2.762291),
           zoom: 12
         });
         var infoWindow = new google.maps.InfoWindow;
-          downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
+        //récupération des infos au format xml
+        downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {
@@ -63,8 +64,8 @@
               var point = new google.maps.LatLng(
                   parseFloat(markerElem.getAttribute('lat')),
                   parseFloat(markerElem.getAttribute('lng')));
-			  //création boite qui contient les infos sur le point
-			  //div & test
+            //création boite qui contient les infos sur le point
+		//div & test
               var infowincontent = document.createElement('div');
               var strong = document.createElement('strong');
               strong.textContent = capteur

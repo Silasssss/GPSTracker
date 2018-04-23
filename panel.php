@@ -107,9 +107,7 @@ else{
 
 }
 ?>
-<div class="container">
-    <h2>test</h2>
-</div>
+    <br></br>
 
     <div id="map"></div>
     <script>

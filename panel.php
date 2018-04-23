@@ -17,109 +17,116 @@
         $date = date("Y-m-d");
     }
     require 'inc/bdd.php';
-    $req = $bdd->prepare('SELECT * FROM coords WHERE DATE(date) = :date');
+    
+
+    if(isset($_GET['cb']))
+    {
+        $type_trajet = $_GET['cb'];
+    }
+    else
+    {
+        $type_trajet = 0;    
+    }
+    $req = $bdd->prepare('SELECT * FROM coords WHERE type_trajet = :trajet AND (DATE(date) = :date)');
+    
     $req->bindParam(':date', $_GET['date']);
+    $req->bindParam(':trajet', $type_trajet);
     $req->execute();
     if ($donnees = $req->fetch() == 0){
             $status = "Aucune donnée pour cette période ($date)";
+            $_SESSION['flash']['danger'] = "Aucune donnée pour cette période <strong>($date)</strong>";
     }
+    else{
+        
+        $_SESSION['flash']['info'] = "1 trajet à été trouvé le ($date)";
+    }
+    $count = $req->fetchColumn(0);
     $req->execute();
 ?>
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Panel test</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="inc/function.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-</head>
-<body>
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#">Panel GPS</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Page 1-1</a></li>
-            <li><a href="#">Page 1-2</a></li>
-            <li><a href="#">Page 1-3</a></li>
-          </ul>
-        </li>
-        <li><a href="#">Page 2</a></li>
-        <li><a href="#">Page 3</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Connexion</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> s'inscrire</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-  
+
+<?php require 'inc/header.php';?>
+    </style> 
 <div class="container">
-  <h1>Vos trajet</h1>
-  <p>2 trajets en mémoire</p>
+  <h1>Vos trajets</h1>
+    <?php if(isset($_SESSION['flash'])): ?>
+      <?php foreach($_SESSION['flash'] as $type => $message):?>
+        <div class="alert alert-<?= $type; ?>">
+          <strong>Info!</strong> <?= $message; ?>
+        </div>
+      <?php endforeach; ?>
+      <?php unset($_SESSION['flash']); ?>
+    <?php endif; ?>    
   <form class="form-horizontal">
     <fieldset>
 
-<!-- Form Name -->
         <legend>Rechercher un trajet</legend>
 
-<!-- Text input-->
         <div class="form-group">
             
             <label class="col-md-4 control-label" for="Date">Date</label>  
             <div class="col-md-4">
-                <input id="Date" name="Date" placeholder="date" class="form-control input-md datepicker" required="" type="text">
+                <input type="text" class="form-control" name="date" id="calendrier" placeholder="Sélectionner une date" required="1">
     
             </div>
         </div>
 
-<!-- Multiple Checkboxes -->
         <div class="form-group">
             <label class="col-md-4 control-label" for="checkboxes">Transport</label>
             <div class="col-md-4">
                 <div class="checkbox">
                     <label for="checkboxes-0">
-                        <input name="checkboxes" id="checkboxes-0" value="1" type="checkbox">
+                        <input name="cb" id="checkboxes" value="0" type="checkbox">
                             Voiture
                     </label>
                 </div>
                  <div class="checkbox">
                      <label for="checkboxes-1">
-                         <input name="checkboxes" id="checkboxes-1" value="2" type="checkbox">
+                         <input name="cb" id="checkboxes" value="1" type="checkbox">
                             Vélo
                     </label>
                 </div>
             </div>
         </div>
-
-<!-- Button -->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="button1"></label>
-  <div class="col-md-4">
-    <button id="button1" name="button1" class="btn btn-primary">Rechercher</button>
-  </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="button1"></label>
+            <div class="col-md-4">
+                <button id="button1" name="" class="btn btn-primary">Rechercher</button>
+            </div>
+        </div>
+    </fieldset>
+  </form>
 </div>
+<?php 
+if(isset($_POST['date']))
+{
+  $date_sel = $_POST['date'];
+}
+else{
+  $date_sel = date("Y-m-d");
+
+}
+?>
 <div class="container">
     <h2>test</h2>
+</div>
+
     <div id="map"></div>
-        <script>
+    <script>
+          downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
+              
+            var xml = data.responseXML;
+            var polylinePlanCoordinates  = [];
+            var markers = xml.documentElement.getElementsByTagName('marker');
+            Array.prototype.forEach.call(markers, function(markerElem) {
+              var date = markerElem.getAttribute('date');
+              var capteur = markerElem.getAttribute('capteur_id');
+              var point = new google.maps.LatLng(
+                  parseFloat(markerElem.getAttribute('lat')),
+                  parseFloat(markerElem.getAttribute('lng')));
+            });
+          });
+      doNothing();
 
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -136,13 +143,6 @@
                    echo 'new google.maps.LatLng('.$lat.', '.$lon.'),';
             }
              ?>
-        ];
-        
-        var point2 = [
-          {lat: 48.184873, lng: -2.7594},
-          {lat: 48.1785384, lng: -2.7241418},
-          {lat: 48.1698004, lng: -2.6008998},
-          {lat: 48.2378594, lng: -2.4514708}         
         ];
         var flightPath = new google.maps.Polyline({
           path: test,
@@ -172,19 +172,23 @@
         }
       doNothing();
     </script>
-</div>
-
-</fieldset>
-</form>
-</div>
-</div>
-
-
+      </script>
+           <script type="text/javascript">
+            $(document).ready(function () {
+                
+                $('#calendrier').datepicker({
+                    autoclose: true,  
+                    weekStart: 1,
+                    format: "yyyy-mm-dd"
+                });  
+            
+            });
+        </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANFCjBuEsUO1o49ZVkXdukdZ2OLUfnajg&callback=initMap"></script>
 </body>
 
 <script>
     $('.datepicker').datepicker();
 </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANFCjBuEsUO1o49ZVkXdukdZ2OLUfnajg&callback=initMap"></script>
 </html> 

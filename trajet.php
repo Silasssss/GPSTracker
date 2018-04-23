@@ -25,28 +25,7 @@
     }
     $req->execute();
 ?>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Trajet</title>
-        <script src="inc/function.js"></script>
-    <style>
-
-      #map {
-        height: 100%;
-      }
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
-<h2 align="center"><?php echo $status;?></h2>
-	<h3 id="dev"></h3>
+ <?php require 'inc/header.php'; ?>
     <div id="map"></div>
     <script>
           downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
@@ -79,13 +58,6 @@
                    echo 'new google.maps.LatLng('.$lat.', '.$lon.'),';
             }
              ?>
-        ];
-        
-        var point2 = [
-          {lat: 48.184873, lng: -2.7594},
-          {lat: 48.1785384, lng: -2.7241418},
-          {lat: 48.1698004, lng: -2.6008998},
-          {lat: 48.2378594, lng: -2.4514708}         
         ];
         var flightPath = new google.maps.Polyline({
           path: test,

@@ -25,6 +25,23 @@ function get_départ($date){
 	$req->execute();
         return $donnees;
 }
+function get_arriver($date){
+    require("bdd.php");
+        $req = $bdd->prepare('SELECT * FROM coords WHERE (DATE(date) = :date) ORDER BY ID DESC LIMIT 1'); 
+       // SELECT * FROM `coords` WHERE `date` = '2018-05-14' ORDER BY ID ASC LIMIT 1
+        $req->bindParam(':date', $date);
+        $req->execute();
+        $donnees = $req->fetch();
+	if ($donnees === 0){
+		$status = "erreur aucune donnée";
+		}
+	else{
+		$status = "données recupéres avec succès";
+		}
+                
+	$req->execute();
+        return $donnees;
+}
 function str_random($length){
 	$alphabet ="0123456789azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN";
 	return substr(str_shuffle(str_repeat($alphabet, $length)), 0, $length);

@@ -14,9 +14,32 @@ require("bdd.php");
 $dom = new DOMDocument("1.0");
 $node = $dom->createElement("markers");
 $parnode = $dom->appendChild($node);
+    if (isset($_GET['date']))
+    {
+ 
+        $date = $_GET['date'];
 
-	$req = $bdd->prepare('SELECT * FROM coords WHERE 1');
-	$req->execute();
+    }
+    else
+    {
+        date_default_timezone_set('Europe/Paris');
+        $date = date("Y-m-d");
+    }
+    if(isset($_GET['cb']))
+    {
+        $type_trajet = $_GET['cb'];
+    }
+    else
+    {
+        $type_trajet = 0;    
+    }
+        $req = $bdd->prepare('SELECT * FROM coords WHERE type_trajet = :trajet AND (DATE(date) = :date)'); 
+        $req->bindParam(':date', $date);
+        $req->bindParam(':trajet', $type_trajet);
+        $req->execute();
+        
+	//$req = $bdd->prepare('SELECT * FROM coords WHERE 1');
+	//$req->execute();
         $donnees = $req->fetch();
 	if ($donnees === 0){
 		$status = "erreur aucune donnée";
@@ -37,10 +60,12 @@ while ($row = $req->fetch()){
   $node = $dom->createElement("marker");
   $newnode = $parnode->appendChild($node);
   $newnode->setAttribute("capteur_id",$row['capteur_id']);
-  $newnode->setAttribute("date", $row['datetime']);
+  $newnode->setAttribute("date", $row['date']);
   $newnode->setAttribute("lat", $row['latitude']);
   $newnode->setAttribute("lng", $row['longitude']);
   $newnode->setAttribute("alt", $row['altitude']);
+  $newnode->setAttribute("type_trajet", $row['type_trajet']);
+  $newnode->setAttribute("id", $row['id']);
 }
 
 echo $dom->saveXML();

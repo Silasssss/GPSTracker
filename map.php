@@ -4,6 +4,58 @@
  * Author : Silas riacourt <silasdu22@gmail.com>
  * 
  */
+  require 'inc/functions.php';
+  logged_only();
+  if(!empty($_POST)){
+
+    if(empty($_POST['password']) || $_POST['password'] != $_POST['password_confirm']){
+        $_SESSION['flash']['danger'] = "Les mots de passes ne correspondent pas";
+    }else{
+        $user_id = $_SESSION['auth']->id;
+        $password= password_hash($_POST['password'], PASSWORD_BCRYPT);
+        require_once 'inc/bdd.php';
+        $pdo->prepare('UPDATE users SET password = ? WHERE id = ?')->execute([$password,$user_id]);
+        $_SESSION['flash']['success'] = "Votre mot de passe a bien été mis à jour";
+    }
+
+}
+    if (isset($_GET['date']))
+    {
+ 
+        $date = $_GET['date'];
+
+    }
+    else
+    {
+        date_default_timezone_set('Europe/Paris');
+        $date = date("Y-m-d");
+    }
+    require 'inc/bdd.php';
+    
+
+    if(isset($_GET['cb']))
+    {
+        $type_trajet = $_GET['cb'];
+    }
+    else
+    {
+        $type_trajet = 0;    
+    }
+    $req = $bdd->prepare('SELECT * FROM coords WHERE type_trajet = :trajet AND (DATE(date) = :date)');
+    
+    $req->bindParam(':date', $_GET['date']);
+    $req->bindParam(':trajet', $type_trajet);
+    $req->execute();
+    if ($donnees = $req->fetch() == 0){
+            $status = "Aucune donnée pour cette période ($date)";
+            $_SESSION['flash']['danger'] = "Aucune donnée pour cette période <strong>($date)</strong>";
+    }
+    else{
+        
+        $_SESSION['flash']['info'] = "1 trajet à été trouvé le ($date)";
+    }
+    $count = $req->fetchColumn(0);
+    $req->execute();
 ?>
 <!DOCTYPE html >
 <!---
@@ -17,24 +69,10 @@
 			: Création 
 
 -->
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <script src="inc/function.js"></script>
-    <title>mysql+maps</title>
-    <style>
-      #map {
-        height: 100%;
-      }
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
 
-  <body>
+<?php require 'inc/header.php';?>
+    </style> 
+
 	  	<h3 id="dev"></h3>
     <div id="map"></div>
 	
@@ -55,7 +93,7 @@
         });
         var infoWindow = new google.maps.InfoWindow;
         //récupération des infos au format xml
-        downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
+        downloadUrl('http://localhost/GPSTracker/inc/convert.php?date=<?php echo $date;?>', function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {

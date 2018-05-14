@@ -43,7 +43,7 @@
     }
     $req = $bdd->prepare('SELECT * FROM coords WHERE type_trajet = :trajet AND (DATE(date) = :date)');
     
-    $req->bindParam(':date', $_GET['date']);
+    $req->bindParam(':date', $date);
     $req->bindParam(':trajet', $type_trajet);
     $req->execute();
     if ($donnees = $req->fetch() == 0){
@@ -75,7 +75,14 @@
     <fieldset>
 
         <legend>Rechercher un trajet</legend>
-
+        <?php 
+        
+                   while ($row = get_départ("2018-05-14")->fetch){
+                   echo $row['latitude'];
+                   echo $row['longitude'];
+            }
+        
+        ?>
         <div class="form-group">
             
             <label class="col-md-4 control-label" for="Date">Date</label>  
@@ -146,6 +153,18 @@ else{
           center: {lat: 48.1843903, lng: -2.762291},
           mapTypeId: 'terrain'
         });
+         var image_arriver = 'inc/drapeau_a.png';
+         var image_départ = 'inc/drapeau_d.png';
+        var départ = new google.maps.Marker({
+          position: {lat: 48.1772994, lng:  	-2.6017738},
+          map: map,
+          icon: image_arriver
+        });         
+        var arriver = new google.maps.Marker({
+          position: {lat: 48.1836724, lng: -2.7463238},
+          map: map,
+          icon: image_départ
+        });
         var test = [
             <?php
 
@@ -155,6 +174,7 @@ else{
                    echo 'new google.maps.LatLng('.$lat.', '.$lon.'),';
             }
              ?>
+                         
         ];
         var flightPath = new google.maps.Polyline({
           path: test,
@@ -166,6 +186,8 @@ else{
 
         flightPath.setMap(map);
       }
+
+
     </script>
         <script>
         var infoWindow = new google.maps.InfoWindow;

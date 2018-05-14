@@ -70,23 +70,7 @@
         flightPath.setMap(map);
       }
     </script>
-        <script>
-        var infoWindow = new google.maps.InfoWindow;
-          downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
-            var xml = data.responseXML;
-            var markers = xml.documentElement.getElementsByTagName('marker');
-            Array.prototype.forEach.call(markers, function(markerElem) {
-              var date = markerElem.getAttribute('date');
-              var capteur = markerElem.getAttribute('capteur_id');
-              var point = new google.maps.LatLng(
-                  parseFloat(markerElem.getAttribute('lat')),
-                  parseFloat(markerElem.getAttribute('lng')));
 
-            });
-          });
-        }
-      doNothing();
-    </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANFCjBuEsUO1o49ZVkXdukdZ2OLUfnajg&callback=initMap"></script>
   </body>

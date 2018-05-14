@@ -57,9 +57,13 @@
         </li>
         <li><a href="#">Carte</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Connexion</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> s'inscrire</a></li>
+      <ul class="nav navbar-nav navbar-right">        
+        <?php if(isset($_SESSION['auth'])): ?>
+            <li><a href="logout.php"><span class="glyphicon glyphicon-log-in"></span> Se déonnecter</a></li>
+        <?php else: ?>
+            <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> Connexion</a></li>
+            <li><a href="register.php"><span class="glyphicon glyphicon-log-in"></span> s'inscrire</a></li>
+        <?php endif; ?>
       </ul>
     </div>
   </div>

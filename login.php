@@ -6,7 +6,7 @@
  * 
  */
 require_once 'inc/functions.php';
-reconnect_from_cookie();
+reconnect_from_cookie();//pour reonnecter l'utilisateur si il a sélectionner rester connecter
 
 if (isset($_SESSION['auth'])) {
     header('Location: index.php');

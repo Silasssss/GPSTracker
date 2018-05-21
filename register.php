@@ -1,4 +1,4 @@
-<?php require 'inc/functions.php';
+<?php
 
 /* 
  *             2017-2018
@@ -6,8 +6,7 @@
  * 
  */
 require 'inc/header.php';
-
-
+require 'inc/functions.php';
 if(!empty($_POST)){
 
 	$errors = array();
@@ -63,13 +62,9 @@ if(!empty($_POST)){
                         header('Location: login.php');
                         exit();
 		}
-
-
-
 }
 
 ?>
-
 <div class="container">
 <h1>S'inscrire !</h1>
 
@@ -112,6 +107,5 @@ if(!empty($_POST)){
 		<button type="submit" class="btn btn-primary">M'inscrire</button>
 
 	</form>
-
 </div>
 <?php require 'inc/footer.php';?>

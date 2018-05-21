@@ -8,8 +8,8 @@
 	$user_id = $_GET['id'];
 
 	$token = $_GET['token'];
-        require_once 'inc/bdd.php';
-        $bdd->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+	require_once 'inc/bdd.php';
+	$bdd->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 	$req = $bdd->prepare('SELECT * FROM users WHERE id =?');
 	$req->execute([$user_id]);
 	$user = $req->fetch();

@@ -4,12 +4,13 @@
  * Author : Silas riacourt <silasdu22@gmail.com>
  * 
  */
-function debug($variable){
-
-	echo '<pre>' . print_r($variable, true) . '</pre>';
-}
 function get_départ($date){
-    require("bdd.php");
+        $host = "localhost";
+        $dbname= "gps";
+        $user= "root";
+        $pass= "";
+        $bdd = new PDO("mysql:dbname=$dbname;host=$host", $user, $pass, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+        $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $req = $bdd->prepare('SELECT * FROM coords WHERE (DATE(date) = :date) ORDER BY ID ASC LIMIT 1'); 
        // SELECT * FROM `coords` WHERE `date` = '2018-05-14' ORDER BY ID ASC LIMIT 1
         $req->bindParam(':date', $date);
@@ -25,13 +26,20 @@ function get_départ($date){
 	$req->execute();
         return $donnees;
 }
+
 function get_arriver($date){
     require("bdd.php");
-        $req = $bdd->prepare('SELECT * FROM coords WHERE (DATE(date) = :date) ORDER BY ID DESC LIMIT 1'); 
-       // SELECT * FROM `coords` WHERE `date` = '2018-05-14' ORDER BY ID ASC LIMIT 1
-        $req->bindParam(':date', $date);
-        $req->execute();
-        $donnees = $req->fetch();
+    $host = "localhost";
+    $dbname= "gps";
+    $user= "root";
+    $pass= "";
+    $bdd = new PDO("mysql:dbname=$dbname;host=$host", $user, $pass, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+    $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $req = $bdd->prepare('SELECT * FROM coords WHERE (DATE(date) = :date) ORDER BY ID DESC LIMIT 1'); 
+    // SELECT * FROM `coords` WHERE `date` = '2018-05-14' ORDER BY ID DESC LIMIT 1
+    $req->bindParam(':date', $date);
+    $req->execute();
+    $donnees = $req->fetch();
 	if ($donnees === 0){
 		$status = "erreur aucune donnée";
 		}
@@ -42,17 +50,18 @@ function get_arriver($date){
 	$req->execute();
         return $donnees;
 }
-function str_random($length){
+function distanceCalculation($point1_lat, $point1_long, $point2_lat, $point2_long, $decimals = 2) {
+    // Calcul de la distance en degrés
+    $degrees = rad2deg(acos((sin(deg2rad($point1_lat))*sin(deg2rad($point2_lat))) + (cos(deg2rad($point1_lat))*cos(deg2rad($point2_lat))*cos(deg2rad($point1_long-$point2_long)))));
+    // Conversion de la distance en degrés à l'unité choisie (kilomètres, milles ou milles nautiques)
+    $distance = $degrees * 111.13384; // 1 degré = 111,13384 km, sur base du diamètre moyen de la Terre (12735 km)
+    return round($distance, $decimals);
+}
+function str_random($length){//génération d'un token d'un taille donner
 	$alphabet ="0123456789azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN";
 	return substr(str_shuffle(str_repeat($alphabet, $length)), 0, $length);
-
 }
-function get_url(){
-	$url ="localhost/GPSTracker";
-	return $url;
-
-}
-function logged_only(){
+function logged_only(){//fonction qui permet de savoir si l'utilisateur est connecté
     if(session_status() == PHP_SESSION_NONE){
         session_start();
     }
@@ -78,7 +87,7 @@ function reconnect_from_cookie(){
         $req->execute([$user_id]);
         $user = $req->fetch();
         if($user){
-            $expected = $user_id . '==' . $user->remember_token . sha1($user_id . 'ratonlaveurs');
+            $expected = $user_id . '==' . $user->remember_token . sha1($user_id . 'rmbtoken');
             if($expected == $remember_token){
                 session_start();
                 $_SESSION['auth'] = $user;

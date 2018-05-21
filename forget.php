@@ -36,7 +36,7 @@ if(!empty($_POST) && !empty($_POST['email'])){
 			<input type="email" name="email" class="form-control"/>
 		</div>
 
-		<button type="submit" class="btn btn-primary">Se connecter</button>
+		<button type="submit" class="btn btn-primary">Demander le changement de mot de passe</button>
 
 	</form>
         

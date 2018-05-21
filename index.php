@@ -63,26 +63,30 @@
     </style> 
 <div class="container">
   <h1>Vos trajets</h1>
-    <?php if(isset($_SESSION['flash'])): ?>
-      <?php foreach($_SESSION['flash'] as $type => $message):?>
-        <div class="alert alert-<?= $type; ?>">
-          <strong>Info!</strong> <?= $message; ?>
+    <?php
+    if ($donnees = $req->fetch() == 0){
+            $status = "aucun trajet n'a été trouvé pour cette date ($date)";
+            ?>
+            <div class="alert alert-danger" role="alert">
+              <strong>ERREUR : </strong> <?php echo $status; ?>.
+            </div>
+    <?php
+    }
+    else{
+        
+        $_SESSION['flash']['info'] = "1 trajet à été trouvé le ($date)";?>
+        <div class="alert alert-success" role="alert">
+          <strong>Succès!</strong> 1 trajet à été trouvé le (<?php echo $date; ?>) <a href="view.php?date=<?php echo $date; ?>" class="alert-link">cliquer ici pour le voir</a>.
         </div>
-      <?php endforeach; ?>
-      <?php unset($_SESSION['flash']); ?>
-    <?php endif; ?>    
+    <?php
+    }
+    $count = $req->fetchColumn(0);
+    $req->execute();
+  ?>
   <form class="form-horizontal">
     <fieldset>
 
         <legend>Rechercher un trajet</legend>
-        <?php 
-        
-                   while ($row = get_départ("2018-05-14")->fetch){
-                   echo $row['latitude'];
-                   echo $row['longitude'];
-            }
-        
-        ?>
         <div class="form-group">
             
             <label class="col-md-4 control-label" for="Date">Date</label>  
@@ -128,85 +132,7 @@ else{
 
 }
 ?>
-    <br></br>
 
-    <div id="map"></div>
-    <script>
-          downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
-              
-            var xml = data.responseXML;
-            var polylinePlanCoordinates  = [];
-            var markers = xml.documentElement.getElementsByTagName('marker');
-            Array.prototype.forEach.call(markers, function(markerElem) {
-              var date = markerElem.getAttribute('date');
-              var capteur = markerElem.getAttribute('capteur_id');
-              var point = new google.maps.LatLng(
-                  parseFloat(markerElem.getAttribute('lat')),
-                  parseFloat(markerElem.getAttribute('lng')));
-            });
-          });
-      doNothing();
-
-      function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 14,
-          center: {lat: 48.1843903, lng: -2.762291},
-          mapTypeId: 'terrain'
-        });
-         var image_arriver = 'inc/drapeau_a.png';
-         var image_départ = 'inc/drapeau_d.png';
-        var départ = new google.maps.Marker({
-          position: {lat: 48.1772994, lng:  	-2.6017738},
-          map: map,
-          icon: image_arriver
-        });         
-        var arriver = new google.maps.Marker({
-          position: {lat: 48.1836724, lng: -2.7463238},
-          map: map,
-          icon: image_départ
-        });
-        var test = [
-            <?php
-
-             while ($row = $req->fetch()){
-                   $lat = $row['latitude'];
-                     $lon = $row['longitude'];
-                   echo 'new google.maps.LatLng('.$lat.', '.$lon.'),';
-            }
-             ?>
-                         
-        ];
-        var flightPath = new google.maps.Polyline({
-          path: test,
-          geodesic: true,
-          strokeColor: '#FF0000',
-          strokeOpacity: 1.0,
-          strokeWeight: 2
-        });
-
-        flightPath.setMap(map);
-      }
-
-
-    </script>
-        <script>
-        var infoWindow = new google.maps.InfoWindow;
-          downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
-            var xml = data.responseXML;
-            var markers = xml.documentElement.getElementsByTagName('marker');
-            Array.prototype.forEach.call(markers, function(markerElem) {
-              var date = markerElem.getAttribute('date');
-              var capteur = markerElem.getAttribute('capteur_id');
-              var point = new google.maps.LatLng(
-                  parseFloat(markerElem.getAttribute('lat')),
-                  parseFloat(markerElem.getAttribute('lng')));
-
-            });
-          });
-        }
-      doNothing();
-    </script>
-      </script>
            <script type="text/javascript">
             $(document).ready(function () {
                 
@@ -218,10 +144,8 @@ else{
             
             });
         </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANFCjBuEsUO1o49ZVkXdukdZ2OLUfnajg&callback=initMap"></script>
 </body>
-
+<?php require 'inc/footer.php'?>
 <script>
     $('.datepicker').datepicker();
 </script>

@@ -16,9 +16,7 @@ $node = $dom->createElement("markers");
 $parnode = $dom->appendChild($node);
     if (isset($_GET['date']))
     {
- 
         $date = $_GET['date'];
-
     }
     else
     {
@@ -37,9 +35,6 @@ $parnode = $dom->appendChild($node);
         $req->bindParam(':date', $date);
         $req->bindParam(':trajet', $type_trajet);
         $req->execute();
-        
-	//$req = $bdd->prepare('SELECT * FROM coords WHERE 1');
-	//$req->execute();
         $donnees = $req->fetch();
 	if ($donnees === 0){
 		$status = "erreur aucune donnée";
@@ -48,15 +43,8 @@ $parnode = $dom->appendChild($node);
 		$status = "données recupéres avec succès";
 		}
 	$req->execute();   
-
-
-
 header("Content-type: text/xml");
-
-
-
 while ($row = $req->fetch()){
-
   $node = $dom->createElement("marker");
   $newnode = $parnode->appendChild($node);
   $newnode->setAttribute("capteur_id",$row['capteur_id']);
@@ -67,8 +55,6 @@ while ($row = $req->fetch()){
   $newnode->setAttribute("type_trajet", $row['type_trajet']);
   $newnode->setAttribute("id", $row['id']);
 }
-
 echo $dom->saveXML();
-
 ?>
 

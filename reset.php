@@ -20,7 +20,7 @@ if(isset($_GET['id']) && isset($_GET['token'])){
                 session_start();
                 $_SESSION['flash']['success'] = 'Votre mot de passe a bien été modifié';
                 $_SESSION['auth'] = $user;
-                header('Location: account.php');
+                header('Location: index.php');
                 exit();
             }
         }

@@ -26,7 +26,11 @@ function get_départ($date){
 	$req->execute();
         return $donnees;
 }
+function get_url(){
+    $url ="localhost/GPSTracker";
+    return $url;
 
+}
 function get_arriver($date){
     require("bdd.php");
     $host = "localhost";

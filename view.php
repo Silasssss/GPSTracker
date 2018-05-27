@@ -53,7 +53,7 @@
     </style> 
 <div class="container">
 
-  <section id="what-we-do">
+  <section id="stats">
     <div class="container-fluid">
       <h2 class="section-title mb-2 h2">Trajet du <?php echo $_GET['date']?></h2>
       <div class="row mt-5">
@@ -128,23 +128,20 @@ else{
         });
         var trajet = [
             <?php
-
              while ($row = $req->fetch()){
                    $lat = $row['latitude'];
                      $lon = $row['longitude'];
                    echo 'new google.maps.LatLng('.$lat.', '.$lon.'),';
             }
-             ?>
-                         
+             ?>         
         ];
         var flightPath = new google.maps.Polyline({
           path: trajet,
           geodesic: true,
-          strokeColor: '#FF0000',
+          strokeColor: '#2700ff',
           strokeOpacity: 1.0,
           strokeWeight: 2
         });
-
         flightPath.setMap(map);
       }
 

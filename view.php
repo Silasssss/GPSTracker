@@ -92,7 +92,7 @@ else{
     <br></br>
     <br></br>
     <script>
-          downloadUrl('http://localhost/GPSTracker/inc/convert.php', function(data) {
+          downloadUrl('http://localhost/Lycée/GPSTracker/inc/convert.php', function(data) {
               
             var xml = data.responseXML;
             var polylinePlanCoordinates  = [];
